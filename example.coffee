@@ -1,6 +1,11 @@
-Logger = require './logger'
-logger = new Logger
+logger = require('./src/logger').logger
+  showMillis: false
+  showTimestamp: true
+  showLogLavelName: true
+  prefix: "rrr"
 
-logger.log(12345)
+require('./src/logger').setLevel(6)
+
+logger.warn(12345)
 
 
