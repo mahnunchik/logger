@@ -9,11 +9,10 @@
 		"url": "https://github.com/drd0rk/logger/issues/"
 	},
 	"dependencies": {
-		"pkginfo": "0.2.x",
-		"underscore": "1.2.x"
+		"underscore": "1.x"
 	},
 	"devDependencies": {
-		"coffee-script": "1.2.x",
+		"coffee-script": "1.x",
 		"vows": "0.5.x"
 	},
 	"main": "logger.js",
@@ -28,6 +27,7 @@
 	},
 	"scripts": {
 		"test": "NODE_ENV=test node_modules/.bin/vows --spec test/*.coffee",
-		"watch": "node_modules/.bin/coffee -c -w -o . src"
+		"watch": "node_modules/.bin/coffee -c -w -o . src",
+		"build": "node_modules/.bin/coffee -c -o . src"
 	}
 }

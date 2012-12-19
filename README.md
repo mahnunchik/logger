@@ -35,6 +35,7 @@ Config options
 
 * `showTimestamp` - Show the timestamp with every message.
 * `showMillis` - Show milliseconds in the timestamp.
+* `showLogLavelName` - Show log lavel name
 * `printObjFunc` - The function to apply objects to, if logged. Default is util.inspect.
 * `prefix` - String that is prepended to every message logged with this instance.
 
