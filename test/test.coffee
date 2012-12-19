@@ -1,53 +1,58 @@
-vows = require 'vows'
 assert = require 'assert'
 logger = require '../'
 
-vows
-	.describe('Logger')
-	.addBatch
-		"when instantiating a new logger":
-			"with a custom config showMillis = true":
-				topic: () ->
+log = null
+
+
+describe 'Logger', ->
+	describe "when instantiating a new logger", ->
+			describe "with a custom config showMillis = true", ->
+				beforeEach () ->
 					config = 
 						showMillis: true
 					log = new logger config
+				afterEach ()->
+					log = null
 				
-				"the value of the logger config for showMillis is true and showTimestamp is still true": (topic) ->
-					assert.equal topic.config.showMillis,true
-					assert.equal topic.config.showTimestamp,true
+				it "the value of the logger config for showMillis is true and showTimestamp is still true", () ->
+					assert.equal log.config.showMillis,true
+					assert.equal log.config.showTimestamp,true
 					
-			"with a custom config showMillis = false":
-				topic: () ->
+			describe "with a custom config showMillis = false", ->
+				beforeEach () ->
 					config = 
 						showMillis: false
 					log = new logger config
+				afterEach ()->
+					log = null
 				
-				"the value of the logger config for showMillis is false and showTimestamp is still true": (topic) ->
-					assert.equal topic.config.showMillis,false
-					assert.equal topic.config.showTimestamp,true
+				it "the value of the logger config for showMillis is false and showTimestamp is still true", () ->
+					assert.equal log.config.showMillis,false
+					assert.equal log.config.showTimestamp,true
 				
-		"when padding a one-digit number with zeros to 2 digits":
-			topic: () ->
+		describe "when padding a one-digit number with zeros to 2 digits", ->
+			beforeEach () ->
 				log = new logger
+			afterEach ()->
+					log = null
 				
-			"the result is the one-digits number left-padded with a zero": (topic) ->
-				assert.equal topic.padZeros(3,2),'03'
+			it "the result is the one-digits number left-padded with a zero", () ->
+				assert.equal log.padZeros(3,2),'03'
 				
-		"when logging a message with setting the log level to 2 (warning)":
-			topic: () ->
+		describe "when logging a message with setting the log level to 2 (warning)", ()->
+			beforeEach () ->
 				logger.setLevel 2
 				config = 
 					showMillis: true
 					prefix: "Test"
 				log = new logger config
+			afterEach ()->
+					log = null
 			
-			"the warning method doesn't throw an error": (topic) ->
+			it "the warning method doesn't throw an error", () ->
 				assert.doesNotThrow () ->
-					topic.warn "test message"
-				assert.notEqual topic.warn("test message"),-1
+					log.warn "test message"
+				assert.notEqual log.warn("test message"),-1
 			
-			"the info method returns -1": (topic) ->
-				assert.equal topic.info("test message"),-1
-
-	
-.exportTo(module)
+			it "the info method returns -1", () ->
+				assert.equal log.info("test message"),-1

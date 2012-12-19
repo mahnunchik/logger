@@ -8,4 +8,7 @@ require('./src/logger').setLevel(6)
 
 logger.warn(12345)
 
+assert = require 'assert'
+console.log 'e', assert.equal
+
 
