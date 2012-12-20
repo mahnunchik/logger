@@ -9,11 +9,11 @@
 		"url": "https://github.com/drd0rk/logger/issues/"
 	},
 	"dependencies": {
-		"underscore": "1.x"
+		"underscore": "1.4.x"
 	},
 	"devDependencies": {
-		"coffee-script": "1.x",
-		"mocha": "*"
+		"coffee-script": "1.4.x",
+		"mocha": "1.7.x"
 	},
 	"main": "logger.js",
 	"licenses": [
@@ -26,7 +26,7 @@
 		"node": ">= 0.4"
 	},
 	"scripts": {
-		"test": "NODE_ENV=test node_modules/.bin/mocha --compilers coffee:coffee-script",
+		"test": "node_modules/.bin/coffee -b -c -o . src && NODE_ENV=test node_modules/.bin/mocha --compilers coffee:coffee-script",
 		"watch": "node_modules/.bin/coffee -b -c -w -o . src",
 		"build": "node_modules/.bin/coffee -b -c -o . src"
 	}

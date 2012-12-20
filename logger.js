@@ -7,7 +7,7 @@ _ = require('underscore');
 defaultConfig = {
   showMillis: false,
   showTimestamp: true,
-  showLogLavelName: true,
+  showLogLevelName: true,
   printObjFunc: require('util').inspect,
   prefix: ""
 };
@@ -15,14 +15,53 @@ defaultConfig = {
 logLevel = 5;
 
 module.exports = Logger = (function() {
+  var _this = this;
 
   Logger.levels = {
-    error: 1,
-    warn: 2,
-    info: 3,
-    log: 4,
-    debug: 5,
-    trace: 6
+    none: {
+      level: 0,
+      name: 'none'
+    },
+    error: {
+      method: 'error',
+      level: 1,
+      name: 'error'
+    },
+    err: {
+      method: 'error',
+      level: 1,
+      name: 'error'
+    },
+    warn: {
+      method: 'warn',
+      level: 2,
+      name: 'warn'
+    },
+    warning: {
+      method: 'warn',
+      level: 2,
+      name: 'warn'
+    },
+    info: {
+      method: 'info',
+      level: 3,
+      name: 'info'
+    },
+    log: {
+      method: 'log',
+      level: 4,
+      name: 'log'
+    },
+    debug: {
+      method: 'log',
+      level: 5,
+      name: 'debug'
+    },
+    trace: {
+      method: 'trace',
+      level: 6,
+      name: 'trace'
+    }
   };
 
   Logger.setLevel = function(level, silent) {
@@ -35,9 +74,9 @@ module.exports = Logger = (function() {
     _ref = Logger.levels;
     for (name in _ref) {
       val = _ref[name];
-      if (level === name || level === val) {
-        levelName = name;
-        levelValue = val;
+      if (level === val.level || level === val.name || level === name) {
+        levelName = val.name;
+        levelValue = val.level;
         break;
       }
     }
@@ -62,6 +101,11 @@ module.exports = Logger = (function() {
     if (config == null) {
       config = {};
     }
+    if (_.isString(config)) {
+      config = {
+        prefix: config
+      };
+    }
     this.config = _.defaults(config, defaultConfig);
   }
 
@@ -77,83 +121,44 @@ module.exports = Logger = (function() {
   };
 
   Logger.prototype._log = function() {
-    var args, date, level, levelName, msg, output, timestamp;
-    levelName = arguments[0], msg = arguments[1], args = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
-    level = Logger.levels[levelName];
-    if ((level != null) && level <= logLevel) {
-      date = new Date;
-      timestamp = "" + (date.getFullYear()) + "-" + (this.padZeros(date.getMonth() + 1, 2)) + "-" + (this.padZeros(date.getDate(), 2)) + " " + (this.padZeros(date.getHours(), 2)) + ":" + (this.padZeros(date.getMinutes(), 2)) + ":" + (this.padZeros(date.getSeconds(), 2));
-      if (this.config.showMillis) {
-        timestamp += "." + (this.padZeros(date.getMilliseconds(), 3));
-      }
+    var args, date, level, levelName, methodName, msg, output, timestamp;
+    level = arguments[0], levelName = arguments[1], methodName = arguments[2], msg = arguments[3], args = 5 <= arguments.length ? __slice.call(arguments, 4) : [];
+    if (level <= logLevel) {
       if (typeof msg === "object") {
         msg = this.config.printObjFunc(msg);
       }
       output = '';
       if (this.config.showTimestamp) {
+        date = new Date;
+        timestamp = "" + (date.getFullYear()) + "-" + (this.padZeros(date.getMonth() + 1, 2)) + "-" + (this.padZeros(date.getDate(), 2)) + " " + (this.padZeros(date.getHours(), 2)) + ":" + (this.padZeros(date.getMinutes(), 2)) + ":" + (this.padZeros(date.getSeconds(), 2));
+        if (this.config.showMillis) {
+          timestamp += "." + (this.padZeros(date.getMilliseconds(), 3));
+        }
         output += "[" + timestamp + "]";
       }
       if (this.config.prefix !== "") {
         output += " " + this.config.prefix;
       }
-      output += this.config.showLogLavelName ? " (" + levelName + ") " : " ";
+      output += this.config.showLogLevelName ? " (" + levelName + ") " : " ";
       output += msg;
       args.unshift(output);
-      return console[levelName].apply(this, args);
+      return console[methodName].apply(this, args);
     } else {
       return -1;
     }
   };
 
-  Logger.prototype.error = function() {
-    var args, msg;
-    msg = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    args.unshift('error', msg);
-    return this._log.apply(this, args);
-  };
-
-  Logger.prototype.warn = function() {
-    var args, msg;
-    msg = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    args.unshift('warn', msg);
-    return this._log.apply(this, args);
-  };
-
-  Logger.prototype.warning = function() {
-    var args, msg;
-    msg = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    args.unshift('warn', msg);
-    return this._log.apply(this, args);
-  };
-
-  Logger.prototype.info = function() {
-    var args, msg;
-    msg = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    args.unshift('info', msg);
-    return this._log.apply(this, args);
-  };
-
-  Logger.prototype.log = function() {
-    var args, msg;
-    msg = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    args.unshift('log', msg);
-    return this._log.apply(this, args);
-  };
-
-  Logger.prototype.debug = function() {
-    var args, msg;
-    msg = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    args.unshift('log', msg);
-    return this._log.apply(this, args);
-  };
-
-  Logger.prototype.trace = function() {
-    var args, msg;
-    msg = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    args.unshift('trace', msg);
-    return this._log.apply(this, args);
-  };
+  _.each(Logger.levels, function(item, propName) {
+    if (item.method != null) {
+      return Logger.prototype[propName] = function() {
+        var args, msg;
+        msg = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+        args.unshift(item.level, item.name, item.method, msg);
+        return this._log.apply(this, args);
+      };
+    }
+  });
 
   return Logger;
 
-})();
+}).call(this);
