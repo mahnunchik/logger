@@ -9,11 +9,11 @@
 		"url": "https://github.com/drd0rk/logger/issues/"
 	},
 	"dependencies": {
-		"underscore": "1.4.x"
+		"underscore": "~1.8.3"
 	},
 	"devDependencies": {
-		"coffee-script": "1.4.x",
-		"mocha": "1.7.x"
+		"coffee-script": "~1.12.5",
+		"mocha": "~3.3.0"
 	},
 	"main": "logger.js",
 	"licenses": [
