@@ -1,6 +1,8 @@
 Basic-Logger
 ============
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/mahnunchik/logger.svg)](https://greenkeeper.io/)
+
 Basic logger for nodejs supporting error, warning, info, debug and trace messages with (or without) timestamp.
 Everything you log is printed to the console.
 
